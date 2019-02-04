@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-directory-resolver",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Babel plugin for custom directory resolution",
   "main": "lib/index.js",
   "author": "Olivier Louvignes <olivier@mgcrea.io>",
