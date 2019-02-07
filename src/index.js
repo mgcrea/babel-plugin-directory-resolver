@@ -1,6 +1,5 @@
 import {dirname, basename, extname, isAbsolute, join, resolve} from 'path';
 import {isDirectory, isFile, isRelative, traverseExpression} from './utils';
-
 // require('debug-utils').install();
 
 const resolveDirname = (path, opts, fileOpts) => {
@@ -10,21 +9,27 @@ const resolveDirname = (path, opts, fileOpts) => {
   const hasExtension = !!extname(path);
   const isAbsolutePath = isAbsolute(path);
   const isRelativePath = isRelative(path);
-  // d({hasExtension, isAbsolutePath, isRelativePath});
   if ((ignoreDirWithDots && hasExtension) || !(isAbsolutePath || isRelativePath)) {
     return path;
   }
-  let nextPath = path;
-  const pathBasename = basename(path);
   const fileDirname = dirname(filename);
-  const fileExtname = extname(filename);
+  // Do we have a matching directory?
   const targetPath = isRelativePath ? resolve(fileDirname, path) : path;
-
-  if (isDirectory(targetPath) && !isFile(join(targetPath, `index${fileExtname}`))) {
-    nextPath = `${path}/${pathBasename}`;
+  if (!isDirectory(targetPath)) {
+    return path;
   }
-
-  return nextPath;
+  // Without any index file?
+  const fileExtname = extname(filename);
+  if (isFile(join(targetPath, `index${fileExtname}`))) {
+    return path;
+  }
+  // Without conflicting file that should have priority?
+  const pathBasename = basename(path);
+  const targetPathDirname = dirname(targetPath);
+  if (isFile(join(targetPathDirname, `${pathBasename}${fileExtname}`))) {
+    return path;
+  }
+  return `${path}/${pathBasename}`;
 };
 
 export default ({types: t}) => {

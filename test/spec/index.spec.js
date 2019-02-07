@@ -47,8 +47,7 @@ describe('plugin', () => {
     describe('should handle a filename matching dirname', () => {
       // @NOTE When a file and a directory on the same level share the same name,
       // the file has priority according to the Node require mechanism
-      // We're not supporting this case here as a directory will prevail
-      testRequireImport('./foo/qux', './foo/qux/qux', transformerOpts);
+      testRequireImport('./foo/qux', './foo/qux', transformerOpts);
     });
 
     describe('should not resolve with basename if an index file exists', () => {
