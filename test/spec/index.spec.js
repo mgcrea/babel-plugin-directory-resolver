@@ -51,7 +51,7 @@ describe('plugin', () => {
     });
 
     describe('should not resolve with basename if an index file exists', () => {
-      testRequireImport('./foo/quux', './foo/quux', transformerOpts);
+      testRequireImport('./foo/quux', './foo/quux/index.js', transformerOpts);
     });
   });
   describe('with ignoreDirWithDots options', () => {
@@ -63,6 +63,17 @@ describe('plugin', () => {
 
     describe('should resolve the file path with a dirname containing a dot', () => {
       testRequireImport('./foo/baz.qux', './foo/baz.qux/baz.qux', transformerOpts);
+    });
+  });
+  describe('with moduleFileExtensions options', () => {
+    const transformerOpts = {
+      babelrc: false,
+      plugins: [[babelPlugin, {moduleFileExtensions: ['ts', 'tsx']}]],
+      filename: FIXTURE_FILENAME
+    };
+
+    describe('should resolve the file path with a dirname containing a dot', () => {
+      testRequireImport('./foo/baz', './foo/baz/index.ts', transformerOpts);
     });
   });
 });

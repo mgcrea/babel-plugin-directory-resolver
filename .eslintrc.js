@@ -6,6 +6,7 @@ module.exports = {
     sourceType: 'module'
   },
   rules: {
+    'no-restricted-syntax': 0
     // 'comma-dangle': [2, 'never'],
     // 'import/extensions': 0,
     // 'import/no-extraneous-dependencies': 0,

@@ -1,2 +1,2 @@
-// import registerGlobals from 'debug-utils';
-// registerGlobals();
+import registerGlobals from 'debug-utils';
+registerGlobals();

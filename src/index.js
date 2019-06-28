@@ -3,7 +3,7 @@ import {isDirectory, isFile, isRelative, traverseExpression} from './utils';
 // require('debug-utils').install();
 
 const resolveDirname = (path, opts, fileOpts) => {
-  const {ignoreDirWithDots = true} = opts;
+  const {ignoreDirWithDots = true, moduleFileExtensions} = opts;
   const {filename} = fileOpts;
   // Only process absolute or relative paths without extensions (eg. exclude regular modules)
   const hasExtension = !!extname(path);
@@ -20,15 +20,22 @@ const resolveDirname = (path, opts, fileOpts) => {
   }
   // Without any index file?
   const fileExtname = extname(filename);
-  if (isFile(join(targetPath, `index${fileExtname}`))) {
-    return path;
+  const fileExtensions = moduleFileExtensions || [fileExtname ? fileExtname.slice(1) : fileExtname];
+  // Enable support for custom extensions
+  for (const extension of fileExtensions) {
+    if (isFile(join(targetPath, `index.${extension}`))) {
+      return `${path}/index.${extension}`;
+    }
   }
+
   // Without conflicting file that should have priority?
   const pathBasename = basename(path);
   const targetPathDirname = dirname(targetPath);
   if (isFile(join(targetPathDirname, `${pathBasename}${fileExtname}`))) {
     return path;
   }
+
+  // Finally activate plugin as a last attempt
   return `${path}/${pathBasename}`;
 };
 
